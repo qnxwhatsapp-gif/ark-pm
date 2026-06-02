@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from './features/auth/AuthContext'
 import ProtectedRoute from './features/auth/ProtectedRoute'
 import LoginPage from './features/auth/LoginPage'
+import UsersPage from './features/admin/UsersPage'
 
 const queryClient = new QueryClient()
 
@@ -28,7 +29,7 @@ export default function App() {
               path="/admin/users"
               element={
                 <ProtectedRoute requiredRole="admin">
-                  <div className="p-8 text-white">Admin Users — coming in Task 9</div>
+                  <UsersPage />
                 </ProtectedRoute>
               }
             />
