@@ -14,3 +14,15 @@ Then run this SQL to make them admin:
 ```sql
 UPDATE public.users SET role = 'admin' WHERE email = 'your-email@example.com';
 ```
+
+## Deploying Edge Functions
+
+1. Install Supabase CLI: `npm install -g supabase`
+2. Login: `supabase login`
+3. Deploy create-user function:
+   ```bash
+   supabase functions deploy create-user --project-ref YOUR_PROJECT_REF
+   ```
+   Find your project ref at: Supabase Dashboard → Settings → General → Reference ID
+
+The `create-user` function requires the `SUPABASE_SERVICE_ROLE_KEY` environment variable. This is automatically available in deployed Edge Functions via Supabase's built-in secrets.
