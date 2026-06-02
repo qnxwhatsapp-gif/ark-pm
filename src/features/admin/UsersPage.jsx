@@ -16,7 +16,10 @@ export default function UsersPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
 
   async function toggleActive(user) {
-    await updateUser(user.id, { is_active: !user.is_active })
+    const { error } = await updateUser(user.id, { is_active: !user.is_active })
+    if (error) {
+      console.error('Failed to update user status:', error)
+    }
   }
 
   if (loading) return <div className="p-8 text-slate-400">Loading users…</div>
@@ -42,7 +45,13 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
+            {users.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="px-4 py-8 text-center text-slate-500 text-sm">
+                  No users found. Click "+ Add User" to create the first user.
+                </td>
+              </tr>
+            ) : users.map(user => (
               <tr key={user.id} className="border-b border-slate-800 last:border-0">
                 <td className="px-4 py-3 text-white font-medium">{user.full_name}</td>
                 <td className="px-4 py-3 text-slate-400 text-sm">{user.email}</td>

@@ -18,6 +18,7 @@ export function useUsers() {
 
   async function createUser({ email, password, full_name, role }) {
     const { data: { session } } = await supabase.auth.getSession()
+    if (!session) return { error: 'Not authenticated' }
     const res = await fetch(
       `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-user`,
       {
