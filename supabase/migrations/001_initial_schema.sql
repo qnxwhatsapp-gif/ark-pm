@@ -154,8 +154,8 @@ ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "admins_full_access_users" ON public.users
   FOR ALL USING (public.get_my_role() = 'admin');
 
-CREATE POLICY "users_read_own" ON public.users
-  FOR SELECT USING (id = auth.uid());
+CREATE POLICY "users_read_authenticated" ON public.users
+  FOR SELECT USING (auth.uid() IS NOT NULL);
 
 -- CLIENTS table
 ALTER TABLE public.clients ENABLE ROW LEVEL SECURITY;
@@ -180,8 +180,11 @@ CREATE POLICY "members_read_projects" ON public.projects
     )
   );
 
-CREATE POLICY "principal_architects_manage_projects" ON public.projects
-  FOR ALL USING (
+CREATE POLICY "principal_architects_insert_projects" ON public.projects
+  FOR INSERT WITH CHECK (public.get_my_role() = 'principal_architect');
+
+CREATE POLICY "principal_architects_manage_assigned_projects" ON public.projects
+  FOR UPDATE USING (
     public.get_my_role() = 'principal_architect'
     AND EXISTS (
       SELECT 1 FROM public.project_members
@@ -200,6 +203,9 @@ CREATE POLICY "members_read_own_memberships" ON public.project_members
 
 -- PHASES table
 ALTER TABLE public.phases ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "admins_full_access_phases" ON public.phases
+  FOR ALL USING (public.get_my_role() = 'admin');
 
 CREATE POLICY "phases_readable_by_project_members" ON public.phases
   FOR SELECT USING (
@@ -274,7 +280,18 @@ CREATE POLICY "comments_readable_by_project_members" ON public.comments
   );
 
 CREATE POLICY "comments_insert_own" ON public.comments
-  FOR INSERT WITH CHECK (user_id = auth.uid());
+  FOR INSERT WITH CHECK (
+    user_id = auth.uid()
+    AND EXISTS (
+      SELECT 1 FROM public.tasks t
+      JOIN public.phases ph ON ph.id = t.phase_id
+      JOIN public.project_members pm ON pm.project_id = ph.project_id
+      WHERE t.id = comments.task_id AND pm.user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "comments_delete_own" ON public.comments
+  FOR DELETE USING (user_id = auth.uid());
 
 -- NOTIFICATIONS table
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
