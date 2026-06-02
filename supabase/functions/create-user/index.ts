@@ -26,9 +26,8 @@ serve(async (req) => {
   )
 
   // Verify the calling user is an admin
-  const { data: { user: caller }, error: authError } = await supabaseAdmin.auth.getUser(
-    authHeader.replace('Bearer ', '')
-  )
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader
+  const { data: { user: caller }, error: authError } = await supabaseAdmin.auth.getUser(token)
   if (authError || !caller) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
@@ -61,8 +60,17 @@ serve(async (req) => {
 
   const { email, password, full_name, role } = body
 
+  const ALLOWED_ROLES = ['principal_architect', 'architect', 'staff_engineer']
+
   if (!email || !password || !full_name || !role) {
     return new Response(JSON.stringify({ error: 'Missing required fields: email, password, full_name, role' }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
+  }
+
+  if (!ALLOWED_ROLES.includes(role)) {
+    return new Response(JSON.stringify({ error: `Invalid role. Must be one of: ${ALLOWED_ROLES.join(', ')}` }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
@@ -82,7 +90,12 @@ serve(async (req) => {
     })
   }
 
-  return new Response(JSON.stringify({ user: data.user }), {
+  return new Response(JSON.stringify({
+    user: {
+      id: data.user.id,
+      email: data.user.email,
+    }
+  }), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   })
 })
