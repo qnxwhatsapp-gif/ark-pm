@@ -47,3 +47,26 @@ test('throws when useAuth used outside AuthProvider', () => {
   expect(() => render(<TestConsumer />)).toThrow()
   spy.mockRestore()
 })
+
+test('sets loading to false even when profile fetch fails', async () => {
+  const { supabase: mockSupabase } = await import('../../lib/supabase')
+  mockSupabase.auth.getSession.mockResolvedValueOnce({
+    data: { session: { user: { id: 'u1', email: 'test@ark.com' } } },
+  })
+  mockSupabase.from.mockReturnValueOnce({
+    select: vi.fn().mockReturnThis(),
+    eq: vi.fn().mockReturnThis(),
+    single: vi.fn().mockRejectedValueOnce(new Error('DB error')),
+  })
+
+  await act(async () => {
+    render(
+      <AuthProvider>
+        <TestConsumer />
+      </AuthProvider>
+    )
+  })
+
+  // loading must be false (not stuck)
+  expect(screen.queryByText('loading')).not.toBeInTheDocument()
+})
