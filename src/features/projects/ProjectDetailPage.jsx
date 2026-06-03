@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useProject } from './useProjects'
 import { useUsers } from '@/features/admin/useUsers'
 import PhaseFormDialog from './PhaseFormDialog'
+import PhaseWithTasks from './PhaseWithTasks'
 
 const STATUS_COLORS = {
   planning:  'border-slate-500 text-slate-400',
@@ -130,33 +131,12 @@ export default function ProjectDetailPage() {
         ) : (
           <div className="space-y-3">
             {phases.map((phase, idx) => (
-              <div key={phase.id} className="bg-slate-900 rounded-lg border border-slate-800 p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-xs text-slate-400 font-medium shrink-0">
-                      {idx + 1}
-                    </div>
-                    <div>
-                      <div className="text-white font-medium">{phase.name}</div>
-                      {(phase.start_date || phase.end_date) && (
-                        <div className="text-slate-500 text-xs mt-0.5">
-                          {[phase.start_date, phase.end_date].filter(Boolean).map(d =>
-                            new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
-                          ).join(' → ')}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${PHASE_STATUS_COLORS[phase.status] ?? PHASE_STATUS_COLORS.pending}`}>
-                      {phase.status}
-                    </span>
-                    <Button variant="outline" size="sm" onClick={e => openEditPhase(e, phase)} className="border-slate-700 text-slate-400 hover:bg-slate-800 text-xs">
-                      Edit
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              <PhaseWithTasks
+                key={phase.id}
+                phase={phase}
+                idx={idx}
+                onEditPhase={phase => { setEditingPhase(phase); setPhaseDialogOpen(true) }}
+              />
             ))}
           </div>
         )}
