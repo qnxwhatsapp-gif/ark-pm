@@ -33,7 +33,7 @@ export default function ClientDetailPage() {
       <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
         <Link to="/clients" className="hover:text-slate-300 transition-colors">Clients</Link>
         <span>/</span>
-        <span className="text-slate-300">Client Detail</span>
+        <span className="text-slate-300">{client.organization}</span>
       </div>
 
       {/* Header */}

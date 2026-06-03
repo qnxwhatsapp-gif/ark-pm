@@ -45,7 +45,7 @@ function renderDetail() {
 test('renders client name and organization', async () => {
   renderDetail()
   await waitFor(() => {
-    expect(screen.getByText('Sharma Industries')).toBeInTheDocument()
+    expect(screen.getAllByText('Sharma Industries')).toHaveLength(2)
     expect(screen.getByText('Rahul Sharma')).toBeInTheDocument()
   })
 })
