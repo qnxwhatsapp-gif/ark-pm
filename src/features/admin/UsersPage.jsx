@@ -25,7 +25,7 @@ export default function UsersPage() {
   if (loading) return <div className="p-8 text-slate-400">Loading users…</div>
 
   return (
-    <div className="p-8">
+    <div className="p-8 min-h-full">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-white">User Management</h1>
         <Button onClick={() => setDialogOpen(true)} className="bg-indigo-600 hover:bg-indigo-700">
