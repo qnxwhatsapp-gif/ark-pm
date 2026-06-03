@@ -10,6 +10,7 @@ import ClientDetailPage from './features/clients/ClientDetailPage'
 import ProjectsPage from './features/projects/ProjectsPage'
 import ProjectDetailPage from './features/projects/ProjectDetailPage'
 import MyTasksPage from './features/tasks/MyTasksPage'
+import ReportsPage from './features/reports/ReportsPage'
 import DashboardPage from './features/dashboard/DashboardPage'
 
 const queryClient = new QueryClient()
@@ -21,6 +22,7 @@ function SidebarLayout({ children }) {
     { to: '/', label: '🏠 Dashboard', always: true },
     { to: '/tasks', label: '✅ My Tasks', roles: ['admin', 'principal_architect', 'architect', 'staff_engineer'] },
     { to: '/projects', label: '📁 Projects', roles: ['admin', 'principal_architect', 'architect', 'staff_engineer'] },
+    { to: '/reports', label: '📊 Reports', roles: ['admin', 'principal_architect'] },
     { to: '/clients', label: '👥 Clients', roles: ['admin', 'principal_architect'] },
     { to: '/admin/users', label: '⚙️ Users', roles: ['admin'] },
   ].filter(item => item.always || item.roles?.includes(profile?.role))
@@ -85,6 +87,7 @@ export default function App() {
             <Route path="/projects" element={<ProtectedWithSidebar><ProjectsPage /></ProtectedWithSidebar>} />
             <Route path="/projects/:id" element={<ProtectedWithSidebar><ProjectDetailPage /></ProtectedWithSidebar>} />
             <Route path="/tasks" element={<ProtectedWithSidebar><MyTasksPage /></ProtectedWithSidebar>} />
+            <Route path="/reports" element={<ProtectedWithSidebar><ReportsPage /></ProtectedWithSidebar>} />
             <Route path="/admin/users" element={<ProtectedWithSidebar requiredRole="admin"><UsersPage /></ProtectedWithSidebar>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
