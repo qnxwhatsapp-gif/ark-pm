@@ -11,6 +11,8 @@ import ProjectsPage from './features/projects/ProjectsPage'
 import ProjectDetailPage from './features/projects/ProjectDetailPage'
 import MyTasksPage from './features/tasks/MyTasksPage'
 import ReportsPage from './features/reports/ReportsPage'
+import NotificationBell from './features/notifications/NotificationBell'
+import NotificationsPage from './features/notifications/NotificationsPage'
 import DashboardPage from './features/dashboard/DashboardPage'
 
 const queryClient = new QueryClient()
@@ -52,7 +54,11 @@ function SidebarLayout({ children }) {
             </NavLink>
           ))}
         </nav>
-        <div className="p-3 border-t border-slate-800">
+        <div className="p-3 border-t border-slate-800 space-y-1">
+          <div className="flex items-center justify-between px-1 py-1">
+            <span className="text-slate-600 text-xs">Notifications</span>
+            <NotificationBell />
+          </div>
           <button
             onClick={signOut}
             className="w-full text-left px-3 py-2 rounded-lg text-sm text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-colors"
@@ -88,6 +94,7 @@ export default function App() {
             <Route path="/projects/:id" element={<ProtectedWithSidebar><ProjectDetailPage /></ProtectedWithSidebar>} />
             <Route path="/tasks" element={<ProtectedWithSidebar><MyTasksPage /></ProtectedWithSidebar>} />
             <Route path="/reports" element={<ProtectedWithSidebar><ReportsPage /></ProtectedWithSidebar>} />
+            <Route path="/notifications" element={<ProtectedWithSidebar><NotificationsPage /></ProtectedWithSidebar>} />
             <Route path="/admin/users" element={<ProtectedWithSidebar requiredRole="admin"><UsersPage /></ProtectedWithSidebar>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
