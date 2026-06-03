@@ -26,3 +26,19 @@ UPDATE public.users SET role = 'admin' WHERE email = 'your-email@example.com';
    Find your project ref at: Supabase Dashboard → Settings → General → Reference ID
 
 The `create-user` function requires the `SUPABASE_SERVICE_ROLE_KEY` environment variable. This is automatically available in deployed Edge Functions via Supabase's built-in secrets.
+
+## notify-task-assigned Edge Function
+
+Creates an in-app notification when a task is assigned to a user.
+
+Deploy:
+```bash
+supabase functions deploy notify-task-assigned --project-ref YOUR_PROJECT_REF
+```
+
+Call from the frontend after assigning a task:
+```js
+await supabase.functions.invoke('notify-task-assigned', {
+  body: { task_id, assigned_to, task_title, project_name }
+})
+```
