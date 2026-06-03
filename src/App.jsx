@@ -7,6 +7,8 @@ import LoginPage from './features/auth/LoginPage'
 import UsersPage from './features/admin/UsersPage'
 import ClientsPage from './features/clients/ClientsPage'
 import ClientDetailPage from './features/clients/ClientDetailPage'
+import ProjectsPage from './features/projects/ProjectsPage'
+import ProjectDetailPage from './features/projects/ProjectDetailPage'
 
 const queryClient = new QueryClient()
 
@@ -33,6 +35,7 @@ function SidebarLayout({ children }) {
 
   const navItems = [
     { to: '/', label: '🏠 Dashboard', always: true },
+    { to: '/projects', label: '📁 Projects', roles: ['admin', 'principal_architect', 'architect', 'staff_engineer'] },
     { to: '/clients', label: '👥 Clients', roles: ['admin', 'principal_architect'] },
     { to: '/admin/users', label: '⚙️ Users', roles: ['admin'] },
   ].filter(item => item.always || item.roles?.includes(profile?.role))
@@ -94,6 +97,8 @@ export default function App() {
             <Route path="/" element={<ProtectedWithSidebar><DashboardPage /></ProtectedWithSidebar>} />
             <Route path="/clients" element={<ProtectedWithSidebar><ClientsPage /></ProtectedWithSidebar>} />
             <Route path="/clients/:id" element={<ProtectedWithSidebar><ClientDetailPage /></ProtectedWithSidebar>} />
+            <Route path="/projects" element={<ProtectedWithSidebar><ProjectsPage /></ProtectedWithSidebar>} />
+            <Route path="/projects/:id" element={<ProtectedWithSidebar><ProjectDetailPage /></ProtectedWithSidebar>} />
             <Route path="/admin/users" element={<ProtectedWithSidebar requiredRole="admin"><UsersPage /></ProtectedWithSidebar>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
