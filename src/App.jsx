@@ -10,26 +10,9 @@ import ClientDetailPage from './features/clients/ClientDetailPage'
 import ProjectsPage from './features/projects/ProjectsPage'
 import ProjectDetailPage from './features/projects/ProjectDetailPage'
 import MyTasksPage from './features/tasks/MyTasksPage'
+import DashboardPage from './features/dashboard/DashboardPage'
 
 const queryClient = new QueryClient()
-
-function DashboardPage() {
-  return (
-    <div className="min-h-screen bg-slate-950 p-8">
-      <h1 className="text-2xl font-bold text-white mb-2">Welcome to Ark Design PM</h1>
-      <p className="text-slate-400 mb-6">You are logged in successfully.</p>
-      <div className="flex gap-4">
-        <a href="/clients" className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg">
-          Clients
-        </a>
-        <a href="/admin/users" className="bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium px-4 py-2 rounded-lg">
-          Manage Users
-        </a>
-      </div>
-      <p className="text-slate-600 text-sm mt-8">Full dashboard coming in Module 5.</p>
-    </div>
-  )
-}
 
 function SidebarLayout({ children }) {
   const { profile, signOut } = useAuth()
