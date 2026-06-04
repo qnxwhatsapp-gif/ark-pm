@@ -15,8 +15,7 @@ export function useReports(filters = {}) {
     let query = supabase
       .from('projects')
       .select(`
-        id, name, status, start_date, deadline,
-        clients(name, organization),
+        id, name, status, start_date, deadline, client_id,
         phases(
           id, name, status,
           tasks(id, status, priority, assigned_to, due_date, completed_at)

@@ -13,7 +13,7 @@ export function useProjects() {
     setLoading(true)
     const { data } = await supabase
       .from('projects')
-      .select('*, clients(name, organization)')
+      .select('*')
       .order('created_at', { ascending: false })
     setProjects(data ?? [])
     setLoading(false)
@@ -53,7 +53,7 @@ export function useProject(id) {
   async function fetchProject() {
     setLoading(true)
     const [{ data: projectData }, { data: phaseData }, { data: memberData }] = await Promise.all([
-      supabase.from('projects').select('*, clients(name, organization)').eq('id', id).single(),
+      supabase.from('projects').select('*').eq('id', id).single(),
       supabase.from('phases').select('*').eq('project_id', id).order('order_index'),
       supabase.from('project_members').select('*, users(id, full_name, role)').eq('project_id', id),
     ])
