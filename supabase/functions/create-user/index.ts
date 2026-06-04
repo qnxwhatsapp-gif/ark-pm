@@ -60,7 +60,7 @@ serve(async (req) => {
 
   const { email, password, full_name, role } = body
 
-  const ALLOWED_ROLES = ['principal_architect', 'architect', 'staff_engineer']
+  const ALLOWED_ROLES = ['admin', 'principal_architect', 'architect', 'staff_engineer']
 
   if (!email || !password || !full_name || !role) {
     return new Response(JSON.stringify({ error: 'Missing required fields: email, password, full_name, role' }), {

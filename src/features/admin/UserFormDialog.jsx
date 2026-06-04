@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const ROLES = [
+  { value: 'admin', label: '🔐 Admin' },
   { value: 'principal_architect', label: 'Principal Architect' },
   { value: 'architect', label: 'Architect' },
   { value: 'staff_engineer', label: 'Staff Engineer' },
