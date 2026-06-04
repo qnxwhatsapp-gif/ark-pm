@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { supabase } from '@/lib/supabase'
 
 export default function LoginPage() {
   const { signIn } = useAuth()
@@ -13,6 +15,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [resetOpen, setResetOpen] = useState(false)
+  const [resetEmail, setResetEmail] = useState('')
+  const [resetError, setResetError] = useState('')
+  const [resetSuccess, setResetSuccess] = useState(false)
+  const [resetSubmitting, setResetSubmitting] = useState(false)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -22,6 +29,27 @@ export default function LoginPage() {
     setSubmitting(false)
     if (error) { setError(error.message); return }
     navigate('/')
+  }
+
+  async function handleResetPassword(e) {
+    e.preventDefault()
+    setResetError('')
+    setResetSuccess(false)
+    setResetSubmitting(true)
+
+    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    })
+
+    setResetSubmitting(false)
+    if (error) {
+      setResetError(error.message)
+      return
+    }
+
+    setResetSuccess(true)
+    setResetEmail('')
+    setTimeout(() => setResetOpen(false), 3000)
   }
 
   return (
@@ -46,7 +74,16 @@ export default function LoginPage() {
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="password" className="text-slate-300">Password</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password" className="text-slate-300">Password</Label>
+                <button
+                  type="button"
+                  onClick={() => setResetOpen(true)}
+                  className="text-indigo-400 hover:text-indigo-300 text-xs"
+                >
+                  Forgot?
+                </button>
+              </div>
               <Input
                 id="password"
                 type="password"
@@ -68,6 +105,44 @@ export default function LoginPage() {
           </form>
         </CardContent>
       </Card>
+
+      {/* Forgot Password Dialog */}
+      <Dialog open={resetOpen} onOpenChange={setResetOpen}>
+        <DialogContent className="bg-slate-900 border-slate-700 text-white max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Reset Password</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleResetPassword} className="space-y-3 mt-2">
+            <div className="space-y-1">
+              <Label htmlFor="reset-email" className="text-slate-300">Email Address</Label>
+              <Input
+                id="reset-email"
+                type="email"
+                value={resetEmail}
+                onChange={e => setResetEmail(e.target.value)}
+                placeholder="you@arkdesign.com"
+                required
+                className="bg-slate-800 border-slate-700 text-white"
+              />
+            </div>
+            {resetError && <p className="text-red-400 text-sm">{resetError}</p>}
+            {resetSuccess && (
+              <div className="bg-emerald-900/20 border border-emerald-800 rounded p-3">
+                <p className="text-emerald-400 text-sm">
+                  ✅ Check your email for a password reset link. It will expire in 1 hour.
+                </p>
+              </div>
+            )}
+            <Button
+              type="submit"
+              disabled={resetSubmitting || resetSuccess}
+              className="w-full bg-indigo-600 hover:bg-indigo-700"
+            >
+              {resetSubmitting ? 'Sending…' : 'Send Reset Link'}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
