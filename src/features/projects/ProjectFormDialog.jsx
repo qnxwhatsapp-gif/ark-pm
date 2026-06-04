@@ -54,11 +54,11 @@ export default function ProjectFormDialog({ open, onOpenChange, onSubmit, initia
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-slate-900 border-slate-700 text-white max-w-lg">
+      <DialogContent className="bg-slate-900 border-slate-700 text-white max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{isEdit ? 'Edit Project' : 'New Project'}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-3 mt-2">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-2 pr-4">
           <div className="space-y-1">
             <Label className="text-slate-300">Project Name *</Label>
             <Input
@@ -78,35 +78,37 @@ export default function ProjectFormDialog({ open, onOpenChange, onSubmit, initia
               className="bg-slate-800 border-slate-700 text-white"
             />
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1">
-              <Label className="text-slate-300">Client</Label>
-              <Select value={form.client_id} onValueChange={v => update('client_id', v)}>
-                <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
-                  <SelectValue placeholder="Select client…" />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-slate-700">
-                  {clients.map(c => (
+          <div className="space-y-1">
+            <Label className="text-slate-300">Client</Label>
+            <Select value={form.client_id} onValueChange={v => update('client_id', v)}>
+              <SelectTrigger className="bg-slate-800 border-slate-700 text-white w-full">
+                <SelectValue placeholder="Select client…" />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-800 border-slate-700 w-full">
+                {clients.length === 0 ? (
+                  <div className="px-3 py-2 text-slate-400 text-sm">No clients available. Create one first.</div>
+                ) : (
+                  clients.map(c => (
                     <SelectItem key={c.id} value={c.id} className="text-white">
-                      {c.organization}
+                      {c.organization || c.name}
                     </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1">
-              <Label className="text-slate-300">Status</Label>
-              <Select value={form.status} onValueChange={v => update('status', v)}>
-                <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-slate-800 border-slate-700">
-                  {STATUSES.map(s => (
-                    <SelectItem key={s.value} value={s.value} className="text-white">{s.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                  ))
+                )}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1">
+            <Label className="text-slate-300">Status</Label>
+            <Select value={form.status} onValueChange={v => update('status', v)}>
+              <SelectTrigger className="bg-slate-800 border-slate-700 text-white w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-800 border-slate-700">
+                {STATUSES.map(s => (
+                  <SelectItem key={s.value} value={s.value} className="text-white">{s.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-1">
