@@ -108,44 +108,44 @@
 src/
 ├── lib/supabase.js                    # Supabase client singleton
 ├── features/
-│   ├── auth/
-│   │   ├── AuthContext.jsx            # Session + profile state, signIn/signOut
-│   │   ├── useAuth.js                 # useAuth() hook
-│   │   ├── LoginPage.jsx              # Role selector → email/password login
-│   │   └── ProtectedRoute.jsx         # Route guard with optional requiredRole
 │   ├── admin/
-│   │   ├── useUsers.js                # useUsers() — list, createUser, updateUser
-│   │   ├── UsersPage.jsx              # User list + Edit + Set Password + Activate
-│   │   └── UserFormDialog.jsx         # Add user modal (all roles)
+│   │   ├── UserFormDialog.jsx            # Add user modal (all roles)
+│   │   ├── UsersPage.jsx                 # User list + Edit + Set Password + Activate
+│   │   └── useUsers.js                   # useUsers() — list, createUser, updateUser
+│   ├── auth/
+│   │   ├── AuthContext.jsx               # Session + profile state, signIn/signOut
+│   │   ├── LoginPage.jsx                 # Role selector → email/password login
+│   │   ├── ProtectedRoute.jsx            # Route guard with optional requiredRole
+│   │   └── useAuth.js                    # useAuth() hook
 │   ├── clients/
-│   │   ├── useClients.js              # useClients() + useClient(id)
-│   │   ├── ClientsPage.jsx            # List + search + add/edit
-│   │   ├── ClientFormDialog.jsx       # Add/edit client modal
-│   │   └── ClientDetailPage.jsx       # Client info + projects list
-│   ├── projects/
-│   │   ├── useProjects.js             # useProjects() + useProject(id)
-│   │   ├── ProjectsPage.jsx           # List + status filters + add/edit
-│   │   ├── ProjectFormDialog.jsx      # Add/edit project modal
-│   │   ├── ProjectDetailPage.jsx      # Detail: progress, phases (PhaseWithTasks), team
-│   │   ├── PhaseFormDialog.jsx        # Add/edit phase modal (suggested names)
-│   │   └── PhaseWithTasks.jsx         # Expandable phase row with tasks inline
-│   ├── tasks/
-│   │   ├── useTasks.js                # usePhaseTasks(phaseId) + useMyTasks() + useTaskComments(taskId)
-│   │   ├── TaskCard.jsx               # Task row: status dropdown, edit, delete, comments toggle
-│   │   ├── TaskFormDialog.jsx         # Add/edit task modal
-│   │   ├── CommentsPanel.jsx          # Comment list + add form per task
-│   │   └── MyTasksPage.jsx            # /tasks — personal task list with stats
+│   │   ├── ClientDetailPage.jsx          # Client info + projects list
+│   │   ├── ClientFormDialog.jsx          # Add/edit client modal
+│   │   ├── ClientsPage.jsx               # List + search + add/edit
+│   │   └── useClients.js                 # useClients() + useClient(id)
 │   ├── dashboard/
-│   │   ├── useDashboard.js            # Parallel stats fetch
-│   │   ├── StatsCard.jsx              # Reusable stat card
-│   │   └── DashboardPage.jsx          # Main dashboard
+│   │   ├── DashboardPage.jsx             # Main dashboard
+│   │   ├── StatsCard.jsx                 # Reusable stat card
+│   │   └── useDashboard.js               # Parallel stats fetch
+│   ├── notifications/
+│   │   ├── NotificationBell.jsx          # Bell + dropdown in sidebar
+│   │   ├── NotificationsPage.jsx         # /notifications full page
+│   │   └── useNotifications.js           # Realtime hook + markAsRead + markAllAsRead
+│   ├── projects/
+│   │   ├── PhaseFormDialog.jsx           # Add/edit phase modal (suggested names)
+│   │   ├── PhaseWithTasks.jsx            # Expandable phase row with tasks inline
+│   │   ├── ProjectDetailPage.jsx         # Detail: progress, phases (PhaseWithTasks), team
+│   │   ├── ProjectFormDialog.jsx         # Add/edit project modal
+│   │   ├── ProjectsPage.jsx              # List + status filters + add/edit
+│   │   └── useProjects.js                # useProjects() + useProject(id)
 │   ├── reports/
-│   │   ├── useReports.js              # useReports(filters) + useAllProjects()
-│   │   └── ReportsPage.jsx            # Charts + table + PDF export
-│   └── notifications/
-│       ├── useNotifications.js        # Realtime hook + markAsRead + markAllAsRead
-│       ├── NotificationBell.jsx       # Bell + dropdown in sidebar
-│       └── NotificationsPage.jsx      # /notifications full page
+│   │   ├── ReportsPage.jsx               # Charts + table + PDF export
+│   │   └── useReports.js                 # useReports(filters) + useAllProjects()
+│   └── tasks/
+│       ├── CommentsPanel.jsx             # Comment list + add form per task
+│       ├── MyTasksPage.jsx               # /tasks — personal task list with stats
+│       ├── TaskCard.jsx                  # Task row: status dropdown, edit, delete, comments toggle
+│       ├── TaskFormDialog.jsx            # Add/edit task modal
+│       └── useTasks.js                   # usePhaseTasks(phaseId) + useMyTasks() + useTaskComments(taskId)
 ├── components/ui/                     # shadcn/ui components
 └── App.jsx                            # Routes + SidebarLayout + ProtectedWithSidebar
 ```
@@ -231,34 +231,22 @@ export function useClient(id) {
 
 ```
 src/__tests__/
-├── auth/AuthContext.test.jsx       3 tests
-├── auth/LoginPage.test.jsx         4 tests
-├── admin/UsersPage.test.jsx        3 tests
-├── clients/ClientsPage.test.jsx    4 tests
-├── clients/ClientDetailPage.test.jsx 3 tests
-├── projects/ProjectsPage.test.jsx  4 tests
-├── projects/ProjectDetailPage.test.jsx 4 tests
-├── tasks/TaskFormDialog.test.jsx   4 tests
-├── tasks/MyTasksPage.test.jsx      3 tests
-├── dashboard/DashboardPage.test.jsx 4 tests
-├── reports/ReportsPage.test.jsx    4 tests
-└── notifications/NotificationsPage.test.jsx 4 tests
+├── admin/UsersPage.test.jsx                      3 tests
+├── auth/AuthContext.test.jsx                     3 tests
+├── auth/LoginPage.test.jsx                       4 tests
+├── clients/ClientDetailPage.test.jsx             3 tests
+├── clients/ClientsPage.test.jsx                  4 tests
+├── dashboard/DashboardPage.test.jsx              4 tests
+├── notifications/NotificationsPage.test.jsx      4 tests
+├── projects/ProjectDetailPage.test.jsx           4 tests
+├── projects/ProjectsPage.test.jsx                4 tests
+├── reports/ReportsPage.test.jsx                  4 tests
+├── tasks/MyTasksPage.test.jsx                    3 tests
+├── tasks/TaskFormDialog.test.jsx                 4 tests
 ```
 
 Run: `npm run test`
 
----
-
-## Environment Variables
-
-```env
-VITE_SUPABASE_URL=https://zgxcfhnosbowklslmpdm.supabase.co
-VITE_SUPABASE_ANON_KEY=<anon key>
-```
-
-Set in `.env.local` (local) and Vercel dashboard (production).
-
----
 
 ## Development Commands
 
@@ -277,3 +265,10 @@ npm run lint     # ESLint
 - **Edge Functions must be manually deployed** via Supabase dashboard or CLI — they are not auto-deployed with Vercel
 - `notify-task-assigned` Edge Function is written but not wired into task creation yet (future: call it after createTask when assigned_to is set)
 - `seed.sql` — use to create initial admin users via Supabase SQL editor when no admin exists yet
+
+## Last Updated
+
+**2026-06-05 16:51 UTC**
+
+### Files Changed in This Commit
+- `scripts/update-claude-md.cjs`
