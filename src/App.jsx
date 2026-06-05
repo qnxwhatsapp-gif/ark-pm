@@ -26,7 +26,7 @@ function SidebarLayout({ children }) {
     { to: '/projects', label: '📁 Projects', roles: ['admin', 'principal_architect', 'architect', 'staff_engineer'] },
     { to: '/reports', label: '📊 Reports', roles: ['admin', 'principal_architect'] },
     { to: '/clients', label: '👥 Clients', roles: ['admin', 'principal_architect'] },
-    { to: '/admin/users', label: '⚙️ Users', roles: ['admin'] },
+    { to: '/admin/users', label: '⚙️ Users', roles: ['admin', 'principal_architect'] },
   ].filter(item => item.always || item.roles?.includes(profile?.role))
 
   return (
@@ -95,7 +95,7 @@ export default function App() {
             <Route path="/tasks" element={<ProtectedWithSidebar><MyTasksPage /></ProtectedWithSidebar>} />
             <Route path="/reports" element={<ProtectedWithSidebar><ReportsPage /></ProtectedWithSidebar>} />
             <Route path="/notifications" element={<ProtectedWithSidebar><NotificationsPage /></ProtectedWithSidebar>} />
-            <Route path="/admin/users" element={<ProtectedWithSidebar requiredRole="admin"><UsersPage /></ProtectedWithSidebar>} />
+            <Route path="/admin/users" element={<ProtectedWithSidebar><UsersPage /></ProtectedWithSidebar>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>

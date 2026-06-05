@@ -41,7 +41,7 @@ serve(async (req) => {
     .eq('id', caller.id)
     .single()
 
-  if (profileError || callerProfile?.role !== 'admin') {
+  if (profileError || !['admin', 'principal_architect'].includes(callerProfile?.role)) {
     return new Response(JSON.stringify({ error: 'Forbidden' }), {
       status: 403,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

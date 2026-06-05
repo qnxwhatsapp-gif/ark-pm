@@ -15,8 +15,19 @@ function renderWithContext(signIn) {
   )
 }
 
-test('renders email and password fields', () => {
+function selectRole(roleName = '🔐 Admin') {
+  fireEvent.click(screen.getByText(roleName))
+}
+
+test('renders role selector on first step', () => {
   renderWithContext(vi.fn())
+  expect(screen.getByText(/select your role to continue/i)).toBeInTheDocument()
+  expect(screen.getByText('🔐 Admin')).toBeInTheDocument()
+})
+
+test('renders email and password fields after selecting a role', () => {
+  renderWithContext(vi.fn())
+  selectRole()
   expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
   expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
 })
@@ -24,6 +35,7 @@ test('renders email and password fields', () => {
 test('calls signIn with email and password on submit', async () => {
   const signIn = vi.fn().mockResolvedValue({ error: null })
   renderWithContext(signIn)
+  selectRole()
 
   fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'admin@ark.com' } })
   fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } })
@@ -37,6 +49,7 @@ test('calls signIn with email and password on submit', async () => {
 test('shows error message when signIn fails', async () => {
   const signIn = vi.fn().mockResolvedValue({ error: { message: 'Invalid credentials' } })
   renderWithContext(signIn)
+  selectRole()
 
   fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'bad@ark.com' } })
   fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'wrong' } })
